@@ -4,11 +4,10 @@ import '../../../domain/repositories/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final RemoteDataSource remoteDataSource;
+
   AuthRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<String> login(String email, String password) async {
-    final data = await remoteDataSource.login(email, password);
-    return data;
-  }
+  Future<String> login(String email, String password) async =>
+      await remoteDataSource.login(email, password);
 }

@@ -9,6 +9,7 @@ import 'package:task_management/presentation/auth/blocs/auth_bloc.dart';
 import 'package:task_management/routes/routes.dart';
 
 import '../../../common/font/monserrat.dart';
+import '../../../common/utils/status.dart';
 import '../../../common/widgets/custom_text_field.dart';
 import '../../../core/utils/constants.dart';
 
@@ -25,9 +26,9 @@ class LoginPage extends StatelessWidget {
       child: Scaffold(
         body: BlocListener<AuthBloc, AuthState>(
           listener: (context, state) async {
-            if (state.status == AuthStatus.error) {
+            if (state.status == Status.error) {
               ScaffoldMessenger.of(context).showSnackBar(snackBar(state.error ?? ''));
-            } else if (state.status == AuthStatus.success) {
+            } else if (state.status == Status.success) {
               Navigator.pushReplacementNamed(context, Routes.task);
               final prefs = await SharedPreferences.getInstance();
               await prefs.setBool(isLoggedIn, true);
@@ -82,7 +83,7 @@ class LoginPage extends StatelessWidget {
                   ),
                   BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
                     switch (state.status) {
-                      case AuthStatus.loading:
+                      case Status.loading:
                         return const Center(
                           child: CircularProgressIndicator(
                             color: Colors.black,

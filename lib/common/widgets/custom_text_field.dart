@@ -10,6 +10,7 @@ class CustomTextFormField extends StatefulWidget {
   final Function(String)? onChanged;
   final int? maxLines;
   final int? minLines;
+  final int? maxLength;
 
   const CustomTextFormField(
       {super.key,
@@ -20,7 +21,8 @@ class CustomTextFormField extends StatefulWidget {
       this.validator,
       this.onChanged,
       this.maxLines,
-      this.minLines});
+      this.minLines,
+      this.maxLength});
 
   @override
   CustomTextFormFieldState createState() {
@@ -44,6 +46,7 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
           height: 4,
         ),
         TextFormField(
+          maxLength: widget.maxLength,
           minLines: widget.minLines ?? 1,
           maxLines: widget.maxLines ?? 1,
           controller: widget.controller,
@@ -64,6 +67,7 @@ class CustomTextFormFieldState extends State<CustomTextFormField> {
               errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30),
                   borderSide: const BorderSide(color: Colors.red)),
+              errorStyle: Montserrat.regular.copyWith(color: Colors.red),
               suffixIconConstraints:
                   const BoxConstraints(minHeight: 24, minWidth: 24),
               suffixIcon: widget.isPassword ?? false

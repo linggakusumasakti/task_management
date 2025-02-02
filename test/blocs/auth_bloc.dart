@@ -1,6 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:task_management/common/utils/status.dart';
 import 'package:task_management/domain/usecases/login_user.dart';
 import 'package:task_management/presentation/auth/blocs/auth_bloc.dart';
 
@@ -29,8 +30,8 @@ void main() {
       },
       act: (bloc) => bloc.add(const LoginEvent(email: 'eve.holt@reqres.in', password: 'cityslicka')),
       expect: () => [
-        const AuthState(status: AuthStatus.loading),
-        const AuthState(status: AuthStatus.success, token: 'mock_token'),
+        const AuthState(status: Status.loading),
+        const AuthState(status: Status.success, token: 'mock_token'),
       ],
     );
   });

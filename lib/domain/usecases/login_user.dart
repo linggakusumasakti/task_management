@@ -5,7 +5,6 @@ class LoginUser {
 
   LoginUser({required this.repository});
 
-  Future<String> execute(String email, String password) {
-    return repository.login(email, password);
-  }
+  Future<String> execute(String email, String password) =>
+      repository.login(email, password);
 }
