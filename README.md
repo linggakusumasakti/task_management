@@ -1,16 +1,67 @@
-# task_management
-
-A new Flutter project.
+# Task Management App
 
 ## Getting Started
+This project is a Task Management application built using Flutter. Follow the instructions below to run the app on your local machine.
 
-This project is a starting point for a Flutter application.
+### Prerequisites
+- Flutter SDK installed ([Flutter installation guide](https://flutter.dev/docs/get-started/install))
+- Dart installed
+- Android Studio or VS Code with Flutter extensions
 
-A few resources to get you started if this is your first Flutter project:
+### Installation
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/your-repo/task-management-app.git
+   ```
+2. Navigate to the project directory:
+   ```sh
+   cd task-management-app
+   ```
+3. Install dependencies:
+   ```sh
+   flutter pub get
+   ```
+4. Run the application:
+   ```sh
+   flutter run
+   ```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Architecture
+The project follows the **BLoC (Business Logic Component) pattern** for state management, ensuring separation of concerns and maintainability.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- **Presentation Layer**: Contains UI components built with Flutter widgets.
+- **Business Logic Layer**: Uses BLoC for managing state and events.
+- **Data Layer**: Handles API calls, local storage, and database interactions.
+
+## Libraries Used
+- **flutter_bloc**: State management using BLoC pattern
+- **http**: For handling API requests
+- **equatable**: Simplifies object comparisons in BLoC states
+- **shared_preferences**: Local storage for saving user preferences
+- **intl**: Date formatting and localization support
+- **get_it**: Dependency injection for better code scalability.
+
+## API Usage
+The app uses a mock API from `reqres.in` for user authentication.
+
+### Login
+To log in, use the following credentials:
+```json
+{
+    "email": "eve.holt@reqres.in",
+    "password": "cityslicka"
+}
+```
+### Endpoint:
+```sh
+POST https://reqres.in/api/login
+```
+
+## Features
+- Task management with CRUD operations
+- Task searching by title
+- Task filtering by status
+- Persistent local storage
+- Authentication with mock API
+
+
