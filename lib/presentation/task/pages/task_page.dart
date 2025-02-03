@@ -23,37 +23,44 @@ class TaskPage extends StatelessWidget {
                 Icons.add_circle_outline_rounded,
                 size: 35,
                 color: Colors.black54,
+              )),
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.search);
+              },
+              icon: const Icon(
+                Icons.search_outlined,
+                size: 35,
+                color: Colors.black54,
               ))
         ],
       ),
-      body: SafeArea(
-          child: ListView(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: BlocBuilder<TaskBloc, TaskState>(
-              builder: (context, state) {
-                switch (state.status) {
-                  case Status.success:
-                    return TaskSuccessSection(
-                      text: state.getInformationTask(),
-                      tasks: state.tasks ?? [],
-                    );
-                  case Status.empty:
-                    return TaskEmptySection(
-                      text: state.getInformationTask(),
-                      onPressed: () {
-                        navigateToAddTask(context);
-                      },
-                    );
-                  default:
-                    return const CircularProgressIndicator();
-                }
-              },
-            ),
-          ),
-        ],
-      )),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        child: BlocBuilder<TaskBloc, TaskState>(
+          builder: (context, state) {
+            switch (state.status) {
+              case Status.success:
+                return TaskSuccessSection(
+                  text: state.getInformationTask(),
+                  tasks: state.tasks ?? [],
+                );
+              case Status.empty:
+                return TaskEmptySection(
+                  text: state.getInformationTask(),
+                  onPressed: () {
+                    navigateToAddTask(context);
+                  },
+                );
+              default:
+                return const Center(
+                    child: CircularProgressIndicator(
+                  color: Colors.black,
+                ));
+            }
+          },
+        ),
+      ),
     );
   }
 

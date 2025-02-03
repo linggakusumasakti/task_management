@@ -3,6 +3,7 @@ import 'package:task_management/presentation/task/pages/task_item.dart';
 
 import '../../../common/font/monserrat.dart';
 import '../../../core/data/models/task.dart';
+import '../../../routes/routes.dart';
 
 class TaskSuccessSection extends StatelessWidget {
   const TaskSuccessSection(
@@ -13,8 +14,7 @@ class TaskSuccessSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
       children: [
         Text(
           "Hello,",
@@ -36,8 +36,17 @@ class TaskSuccessSection extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           itemBuilder: (context, index) {
             final task = tasks[index];
-            return TaskItem(
-              task: task,
+            return GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  Routes.addTask,
+                  arguments: task,
+                );
+              },
+              child: TaskItem(
+                task: task,
+              ),
             );
           },
           separatorBuilder: (BuildContext context, int index) => const SizedBox(

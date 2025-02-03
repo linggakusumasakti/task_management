@@ -19,10 +19,18 @@ class TaskState extends Equatable {
     if (tasks?.isEmpty ?? false || tasks == null) {
       return 'Let\'s create a task. Get things done, one task at a time!';
     }
-    if ((tasks?.length ?? 0) < 2) {
+    var total = 0;
+    for (Task task in tasks!) {
+      if (task.status != TaskStatus.completed) {
+        total++;
+      }
+    }
+    if (total == 0) {
+      return 'You have completed the task';
+    } else if (total < 2) {
       return 'You have 1 task to complete';
     } else {
-      return 'You have ${tasks?.length} tasks to complete';
+      return 'You have $total tasks to complete';
     }
   }
 

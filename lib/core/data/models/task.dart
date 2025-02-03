@@ -46,11 +46,11 @@ extension TaskStatusExtension on TaskStatus {
   String get displayName {
     switch (this) {
       case TaskStatus.pending:
-        return "Pending Task";
+        return "Pending";
       case TaskStatus.inProgress:
-        return "Work in Progress";
+        return "In Progress";
       case TaskStatus.completed:
-        return "Task Completed";
+        return "Completed";
     }
   }
 }

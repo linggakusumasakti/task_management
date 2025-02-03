@@ -1,26 +1,39 @@
-import 'package:flutter_test/flutter_test.dart';
-
 import 'package:bloc_test/bloc_test.dart';
+import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:task_management/common/utils/status.dart';
 import 'package:task_management/core/data/models/task.dart';
 import 'package:task_management/domain/usecases/add_task.dart';
+import 'package:task_management/domain/usecases/delete_task.dart';
 import 'package:task_management/domain/usecases/get_tasks.dart';
+import 'package:task_management/domain/usecases/update_task.dart';
 import 'package:task_management/presentation/task/blocs/task_bloc.dart';
 
 class MockAddTask extends Mock implements AddTask {}
 
 class MockGetTasks extends Mock implements GetTasks {}
 
+class MockUpdateTask extends Mock implements UpdateTask {}
+
+class MockDeleteTask extends Mock implements DeleteTask {}
+
 void main() {
   late TaskBloc taskBloc;
   late MockAddTask mockAddTask;
   late MockGetTasks mockGetTasks;
+  late MockUpdateTask mockUpdateTask;
+  late MockDeleteTask mockDeleteTask;
 
   setUp(() {
     mockAddTask = MockAddTask();
     mockGetTasks = MockGetTasks();
-    taskBloc = TaskBloc(addTask: mockAddTask, getTasks: mockGetTasks);
+    mockUpdateTask = MockUpdateTask();
+    mockDeleteTask = MockDeleteTask();
+    taskBloc = TaskBloc(
+        addTask: mockAddTask,
+        getTasks: mockGetTasks,
+        updateTask: mockUpdateTask,
+        deleteTask: mockDeleteTask);
   });
 
   tearDown(() {

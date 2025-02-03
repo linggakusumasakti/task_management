@@ -1,28 +1,59 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management/common/font/monserrat.dart';
+import 'package:task_management/common/utils/ext/date_time.dart';
 import 'package:task_management/common/utils/ext/string.dart';
+import 'package:task_management/common/widgets/custom_dialog.dart';
 import 'package:task_management/common/widgets/custom_text_field.dart';
 import 'package:task_management/common/widgets/primary_button.dart';
 import 'package:task_management/core/data/models/task.dart';
 import 'package:task_management/presentation/add_task/pages/date_section.dart';
+import 'package:task_management/presentation/add_task/pages/task_status_section.dart';
 import 'package:task_management/presentation/task/blocs/task_bloc.dart';
 
 import '../../../common/utils/status.dart';
 
 class AddTaskPage extends StatelessWidget {
-  const AddTaskPage({super.key});
+  const AddTaskPage({super.key, this.task});
+
+  final Task? task;
 
   @override
   Widget build(BuildContext context) {
     final TextEditingController titleController = TextEditingController();
     final TextEditingController descriptionController = TextEditingController();
     final formKey = GlobalKey<FormState>();
-    var dueDate = '';
+    var dueDate = DateTime.now().formatDate() ?? '';
+    var taskStatus = TaskStatus.pending;
+    if (task != null) {
+      titleController.text = task?.title ?? '';
+      descriptionController.text = task?.description ?? '';
+      dueDate = task?.dueDate ?? '';
+      taskStatus = task?.status ?? TaskStatus.pending;
+    }
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          Visibility(
+            visible: task != null,
+            child: IconButton(
+                onPressed: () {
+                  customDialog(context, 'message', onPressed: () {
+                    context.read<TaskBloc>().add(DeleteTaskEvent(id: task?.id ?? 0));
+                    context.read<TaskBloc>().add(GetTasksEvent());
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  });
+                },
+                icon: const Icon(
+                  Icons.delete_outline_rounded,
+                  size: 30,
+                  color: Colors.black54,
+                )),
+          )
+        ],
         title: Text(
-          'Add Task',
+          task == null ? 'Add Task' : 'Your Task',
           style: Montserrat.medium,
         ),
       ),
@@ -30,6 +61,7 @@ class AddTaskPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Form(
                   key: formKey,
@@ -54,8 +86,6 @@ class AddTaskPage extends StatelessWidget {
                         minLines: 5,
                         maxLines: 10,
                         controller: descriptionController,
-                        validator: (value) =>
-                            'Description can\'t be empty'.validator(value),
                       ),
                     ],
                   )),
@@ -63,8 +93,18 @@ class AddTaskPage extends StatelessWidget {
                 height: 10,
               ),
               DateSection(
+                date: dueDate,
                 onSelected: (date) {
                   dueDate = date;
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TaskStatusSection(
+                index: taskStatus.index,
+                onSelected: (status) {
+                  taskStatus = status;
                 },
               ),
               const Spacer(),
@@ -78,15 +118,26 @@ class AddTaskPage extends StatelessWidget {
                     );
                   }
                   return PrimaryButton(
-                    text: 'Create Task',
+                    text: task == null ? 'Create Task' : 'Update Task',
                     onPressed: () {
                       if (formKey.currentState?.validate() ?? false) {
-                        context.read<TaskBloc>().add(AddTaskEvent(
-                            task: Task(
-                                title: titleController.text,
-                                description: descriptionController.text,
-                                dueDate: dueDate,
-                                status: TaskStatus.pending)));
+                        if (task == null) {
+                          context.read<TaskBloc>().add(AddTaskEvent(
+                              task: Task(
+                                  title: titleController.text,
+                                  description: descriptionController.text,
+                                  dueDate: dueDate,
+                                  status: taskStatus)));
+                        } else {
+                          context.read<TaskBloc>().add(UpdateTaskEvent(
+                              task: Task(
+                                  id: task?.id,
+                                  title: titleController.text,
+                                  description: descriptionController.text,
+                                  dueDate: dueDate,
+                                  status: taskStatus)));
+                        }
+
                         context.read<TaskBloc>().add(GetTasksEvent());
                         Navigator.of(context).pop();
                       }
