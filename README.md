@@ -36,6 +36,7 @@ The project follows the **BLoC (Business Logic Component) pattern** for state ma
 ## Libraries Used
 - **flutter_bloc**: State management using BLoC pattern
 - **http**: For handling API requests
+- **sqflite**: SQLite database for local storage.
 - **equatable**: Simplifies object comparisons in BLoC states
 - **shared_preferences**: Local storage for saving user preferences
 - **intl**: Date formatting and localization support
