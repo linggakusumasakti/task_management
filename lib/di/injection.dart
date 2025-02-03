@@ -9,6 +9,7 @@ import 'package:task_management/domain/repositories/auth_repository.dart';
 import 'package:task_management/domain/repositories/task_repository.dart';
 import 'package:task_management/domain/usecases/add_task.dart';
 import 'package:task_management/domain/usecases/delete_task.dart';
+import 'package:task_management/domain/usecases/filter_tasks.dart';
 import 'package:task_management/domain/usecases/get_tasks.dart';
 import 'package:task_management/domain/usecases/login_user.dart';
 import 'package:task_management/domain/usecases/search_tasks.dart';
@@ -26,7 +27,8 @@ void init() {
       addTask: locator(),
       getTasks: locator(),
       updateTask: locator(),
-      deleteTask: locator()));
+      deleteTask: locator(),
+      filterTasks: locator()));
   locator.registerFactory<SearchBloc>(() => SearchBloc(searchTasks: locator()));
 
   // use cases
@@ -36,6 +38,7 @@ void init() {
   locator.registerLazySingleton(() => UpdateTask(repository: locator()));
   locator.registerLazySingleton(() => DeleteTask(repository: locator()));
   locator.registerLazySingleton(() => SearchTasks(repository: locator()));
+  locator.registerLazySingleton(() => FilterTasks(repository: locator()));
 
   // repository
   locator.registerLazySingleton<AuthRepository>(

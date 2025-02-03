@@ -24,4 +24,8 @@ class TaskRepositoryImpl implements TaskRepository {
   @override
   Future<List<Task>> searchTasks(String query) async =>
       await localDataSource.searchTasks(query);
+
+  @override
+  Future<List<Task>> filterTasks(TaskStatus status) async =>
+      await localDataSource.filerTasks(status);
 }

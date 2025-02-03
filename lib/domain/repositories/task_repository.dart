@@ -6,4 +6,5 @@ abstract class TaskRepository {
   Future<int> updateTask(Task task);
   Future<int> deleteTask(int id);
   Future<List<Task>> searchTasks(String query);
+  Future<List<Task>> filterTasks(TaskStatus status);
 }

@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_management/domain/usecases/add_task.dart';
 import 'package:task_management/domain/usecases/delete_task.dart';
+import 'package:task_management/domain/usecases/filter_tasks.dart';
 import 'package:task_management/domain/usecases/get_tasks.dart';
 import 'package:task_management/domain/usecases/update_task.dart';
 
@@ -9,6 +10,7 @@ import '../../../common/utils/status.dart';
 import '../../../core/data/models/task.dart';
 
 part 'task_event.dart';
+
 part 'task_state.dart';
 
 class TaskBloc extends Bloc<TaskEvent, TaskState> {
@@ -16,12 +18,14 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
   final GetTasks getTasks;
   final UpdateTask updateTask;
   final DeleteTask deleteTask;
+  final FilterTasks filterTasks;
 
   TaskBloc(
       {required this.addTask,
       required this.getTasks,
       required this.updateTask,
-      required this.deleteTask})
+      required this.deleteTask,
+      required this.filterTasks})
       : super(TaskState.initial()) {
     on<AddTaskEvent>((event, emit) async {
       try {
@@ -62,6 +66,16 @@ class TaskBloc extends Bloc<TaskEvent, TaskState> {
         emit(state.copyWith(status: Status.loading));
         await deleteTask.execute(event.id);
         emit(state.copyWith(status: Status.success));
+      } on FormatException catch (e) {
+        emit(state.copyWith(status: Status.error, error: e.message));
+      }
+    });
+
+    on<FilterTasksEvent>((event, emit) async {
+      try {
+        emit(state.copyWith(status: Status.loading, tasks: []));
+        final tasks = await filterTasks.execute(event.status);
+        emit(state.copyWith(status: Status.success, tasks: tasks));
       } on FormatException catch (e) {
         emit(state.copyWith(status: Status.error, error: e.message));
       }

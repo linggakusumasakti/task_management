@@ -39,7 +39,9 @@ class AddTaskPage extends StatelessWidget {
             child: IconButton(
                 onPressed: () {
                   customDialog(context, 'message', onPressed: () {
-                    context.read<TaskBloc>().add(DeleteTaskEvent(id: task?.id ?? 0));
+                    context
+                        .read<TaskBloc>()
+                        .add(DeleteTaskEvent(id: task?.id ?? 0));
                     context.read<TaskBloc>().add(GetTasksEvent());
                     Navigator.of(context).pop();
                     Navigator.of(context).pop();
@@ -136,6 +138,25 @@ class AddTaskPage extends StatelessWidget {
                                   description: descriptionController.text,
                                   dueDate: dueDate,
                                   status: taskStatus)));
+                          switch (taskStatus) {
+                            case TaskStatus.pending:
+                              context.read<TaskBloc>().add(
+                                  const FilterTasksEvent(
+                                      status: TaskStatus.pending));
+                              break;
+                            case TaskStatus.inProgress:
+                              context.read<TaskBloc>().add(
+                                  const FilterTasksEvent(
+                                      status: TaskStatus.inProgress));
+                              break;
+                            case TaskStatus.completed:
+                              context.read<TaskBloc>().add(
+                                  const FilterTasksEvent(
+                                      status: TaskStatus.completed));
+                              break;
+                            default:
+                              break;
+                          }
                         }
 
                         context.read<TaskBloc>().add(GetTasksEvent());

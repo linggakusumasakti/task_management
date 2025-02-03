@@ -12,6 +12,8 @@ abstract class LocalDataSource {
   Future<int> deleteTask(int id);
 
   Future<List<Task>> searchTasks(String query);
+
+  Future<List<Task>> filerTasks(TaskStatus status);
 }
 
 class LocalDataSourceImpl implements LocalDataSource {
@@ -78,6 +80,20 @@ class LocalDataSourceImpl implements LocalDataSource {
         where: 'title LIKE ?',
         whereArgs: ['%$query%'],
       );
+      return tasks.map((task) => Task.fromMap(task)).toList();
+    } catch (e) {
+      throw FormatException(e.toString());
+    }
+  }
+
+  @override
+  Future<List<Task>> filerTasks(TaskStatus status) async {
+    try {
+      final db = await provider.database;
+      final tasks = await db.query(
+          tableTask,
+          where: 'status = ?',
+          whereArgs: [status.index]);
       return tasks.map((task) => Task.fromMap(task)).toList();
     } catch (e) {
       throw FormatException(e.toString());
